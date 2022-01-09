@@ -5,7 +5,7 @@ export default function Articles() {
     return (
         <div className='flex flex-col justify-start mt-8'>
             <div className='font-bold text-indigo-900 text-2xl'>The Science behind SmartUV</div>
-            <div className='mt-8 grid grid-cols-4 gap-3' style={{ height: "calc(200px + 7rem)"}}>
+            <div className='mt-2 flex gap-3'>
                 <MinorBlog props = {{
                     imageUrl : "https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
                     blogTitle: "Voluptate officia mollit sunt dolore exercitation.", 

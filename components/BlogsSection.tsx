@@ -1,6 +1,7 @@
 import React from 'react'
 import Blog from './Blog'
 import { useState } from 'react'
+import MinorBlog from './MinorBlog'
 export default function BlogsSection() {
     const [ blogs, setBlogs ] = useState([
         {
@@ -17,19 +18,16 @@ export default function BlogsSection() {
         },
         {
             blogTitle : "Dolor cillum culpa dolor aliqua mollit officia esse ad ut.",
-            imageUrl : "https://images.pexels.com/photos/9304473/pexels-photo-9304473.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
             summary : "Ipsum dolore irure fugiat aute mollit fugiat anim labore quis est duis ad proident. Consequat reprehenderit anim irure aliquip incididunt reprehenderit id cupidatat et deserunt. Nulla deserunt consectetur in aute irure aute qui consectetur ex ad nisi ex. Sunt aliquip fugiat qui magna Lorem incididunt nulla nostrud proident tempor eu labore.",
             displayImg : false
         },
         {
             blogTitle : "Dolor cillum culpa dolor aliqua mollit officia esse ad ut.",
-            imageUrl : "https://images.pexels.com/photos/9904214/pexels-photo-9904214.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
             summary : "Ipsum dolore irure fugiat aute mollit fugiat anim labore quis est duis ad proident. Consequat reprehenderit anim irure aliquip incididunt reprehenderit id cupidatat et deserunt. Nulla deserunt consectetur in aute irure aute qui consectetur ex ad nisi ex. Sunt aliquip fugiat qui magna Lorem incididunt nulla nostrud proident tempor eu labore.",
             displayImg : false
         },
         {
             blogTitle : "Dolor cillum culpa dolor aliqua mollit officia esse ad ut.",
-            imageUrl : "https://images.pexels.com/photos/8984273/pexels-photo-8984273.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
             summary : "Ipsum dolore irure fugiat aute mollit fugiat anim labore quis est duis ad proident. Consequat reprehenderit anim irure aliquip incididunt reprehenderit id cupidatat et deserunt. Nulla deserunt consectetur in aute irure aute qui consectetur ex ad nisi ex. Sunt aliquip fugiat qui magna Lorem incididunt nulla nostrud proident tempor eu labore.",
             displayImg : false
         }
@@ -43,16 +41,28 @@ export default function BlogsSection() {
                         gridRow : "span 3"
                     } : null
 
-                    return (<Blog 
+                    if(index <= 1){
+                        return (<Blog 
+                            key={index}
+                            props = {{
+                                blogTitle : blog.blogTitle,
+                                imageUrl : blog.imageUrl,
+                                summary : blog.summary,
+                                displayImg : blog.displayImg,
+                                styleProp
+                            }}
+                        />)
+                    }
+
+                    return (<MinorBlog
                         key={index}
                         props = {{
+                            imageUrl: blog?.imageUrl,
                             blogTitle : blog.blogTitle,
-                            imageUrl : blog.imageUrl,
-                            summary : blog.summary,
-                            displayImg : blog.displayImg,
-                            styleProp
+                            summary : blog.summary
                         }}
                     />)
+
                 })
             }
         </div>
