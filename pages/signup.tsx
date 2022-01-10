@@ -9,7 +9,14 @@ export default function signup() {
         let email = (e.target[3].value); // email
         let password = (e.target[4].value); // password
 
-        // fetch(`${process.env.}`)
+        fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/getBlogs`).then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not OK');
+            }
+            return res.json();
+        })
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
 
     }
     // console.log(process.env.API_ENDPOINT);
@@ -19,6 +26,7 @@ export default function signup() {
                 <Head>
                     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"/>
                 </Head>
+                {/* {process.env.NEXT_PUBLIC_API_ENDPOINT} */}
                 <form onSubmit={submitHandle} method='POST'>
                     <legend className="relative w-full block bg-indigo-900 p-4 text-slate-50 text-xl after:content-[''] after:bg-[url(http://simpleicon.com/wp-content/uploads/multy-user.png)] after:bg-no-repeat after:bg-right after:bg-[length:100px_100px] after:absolute after:opacity-5 after:inset-0">
                         Sign up
