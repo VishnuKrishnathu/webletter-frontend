@@ -1,4 +1,6 @@
 import React from 'react';
+import Articles from './Articles';
+import BlogsSection from './BlogsSection';
 import Post from './Post';
 import Promotion from './Promotion';
 
@@ -12,7 +14,8 @@ export default function ArticlesSection() {
                 posterTitle="Time to Get Your House Clean and in Order"
                 summary="Aliqua enim do est pariatur eu reprehenderit ea excepteur. Sunt tempor incididunt velit exercitation veniam dolore velit culpa occaecat nisi quis dolor et. Enim exercitation mollit occaecat nulla nostrud."
             />
-            <Post />
+            <BlogsSection />
+            <Articles />
         </div>
     )
 }

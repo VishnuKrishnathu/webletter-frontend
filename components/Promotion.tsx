@@ -23,7 +23,7 @@ export default function Promotion(props :IPromotionProps) {
                         <p className='text-indigo-900'>
                             {props.summary}
                         </p>
-                        <button className='text-slate-50 bg-indigo-500 mb-8 mt-4 p-2 rounded'>Read Article</button>
+                        <button className='text-slate-50 bg-indigo-500 mb-5 mt-4 p-2 rounded'>Read Article</button>
                     </div>
                 </div>
             </div>

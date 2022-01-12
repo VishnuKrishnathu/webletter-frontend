@@ -1,0 +1,29 @@
+name: Webletter frontend
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        node-version: [17.3.0]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setting up NodeJS version ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Installing the dependencies
+      run: yarn install
+
+    - name: Building the application
+      run: yarn run build
