@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { authAxios } from '@/constants/axios.config';
 import { useRouter } from 'next/router';
 
-export default function signup() {
+export default function Signup() {
 
     const [error, setErrorState] = useState<string>("");
     const [loadingState, setLoadingState] = useState<boolean>(false);
