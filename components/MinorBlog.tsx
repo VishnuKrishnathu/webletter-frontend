@@ -12,12 +12,13 @@ export default function MinorBlog({props} : {props :IMinorBlogProps}) {
         <div className='rounded shadow-md p-2 flex flex-col min-w-[17rem]'>
             {props.imageUrl && image && 
             <Image 
-                loader={() => image} 
+                loader={({ src, width, quality }) => image} 
                 src={image} 
                 alt="blog image" 
                 height={200} 
                 width={300} 
                 objectFit='cover'
+                quality={30}
             />}
             <div className='text-xl font-black text-indigo-900 grow'>{props.blogTitle}</div>
             <p className='text-clip overflow-hidden text-indigo-900 grow max-h-28'>{props.summary}</p>
