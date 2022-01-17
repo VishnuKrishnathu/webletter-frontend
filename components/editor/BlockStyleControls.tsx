@@ -22,6 +22,7 @@ export default function BlockStyleControls (props: IStyleProps){
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType();
+
   return (
     <div className="RichEditor-controls">
       {BLOCK_TYPES.map(type =>

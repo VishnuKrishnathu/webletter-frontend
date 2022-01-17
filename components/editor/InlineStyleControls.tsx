@@ -10,9 +10,10 @@ const INLINE_STYLES = [
 ];
 
 export default function InlineStyleControls (props : IStyleProps) {
-  var currentStyle = props.editorState.getCurrentInlineStyle();
+  const currentStyle = props.editorState.getCurrentInlineStyle();
+
   return (
-    <div className="RichEditor-controls">
+    <div className="mb-3">
       {INLINE_STYLES.map(type =>
         <StyleButton
           key={type.label}
