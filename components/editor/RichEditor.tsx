@@ -62,8 +62,7 @@ export default function RichEditor() {
     });
 
     function handleClick(){
-      let htmlContent = convertToHTML(editorState.getCurrentContent());
-      console.log(htmlContent);
+      let contentRaw = convertToRaw(editorState.getCurrentContent())
     }
 
     function getBlockStyle(block :ContentBlock) :string{
@@ -117,7 +116,7 @@ export default function RichEditor() {
               editorState={editorState}
               onToggle={toggleBlockType}
             />
-            <div className='RichEditor-editor border-2 border-indigo-900 h-40 px-2 overflow-y-scroll mt-4 pb-2'>
+            <div className='RichEditor-editor border-2 border-indigo-900 px-2 mt-4 py-2 h-80 overflow-scroll'>
                 <Editor
                   blockStyleFn={getBlockStyle}
                   customStyleMap={styleMap}
@@ -130,7 +129,12 @@ export default function RichEditor() {
                   autoCorrect='on'
                 />
             </div>
-            <button onClick={handleClick}>GET TEXT</button>
+            <button 
+              onClick={handleClick}
+              className='mt-4 rounded bg-indigo-900 p-2 text-slate-50'
+            >
+              SUBMIT
+            </button>
         </div>
     )
 }

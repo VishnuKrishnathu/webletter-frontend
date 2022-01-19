@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { authAxios } from '@/constants/axios.config';
 
 export default function Login() {
     const [error, setErrorState] = useState<string>("");
     const [loadingState, setLoadingState] = useState<boolean>(false);
+
 
     const router = useRouter();
 
@@ -21,7 +22,6 @@ export default function Login() {
         }).then(data => {
             setLoadingState(false);
             router.push("/");
-            console.log(data);
         }).catch(err => {
             console.log(err);
             setLoadingState(false);

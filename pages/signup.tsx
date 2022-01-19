@@ -30,7 +30,7 @@ export default function Signup() {
             username, full_name, email, password
         }).then(({data}) => {
             setLoadingState(false);
-            router.push('/');
+            router.push('/login');
         })
         .catch(err => {
             setLoadingState(false);
