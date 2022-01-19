@@ -21,7 +21,7 @@ export default function StyleButton (props: {
 
 
     return (
-      <span className={`cursor-pointer m-2 p-2 rounded hover:border-2 hover:border-indigo-400`} onMouseDown={onToggle}>
+      <span className={`cursor-pointer mx-2 p-2 rounded hover:border-2 hover:border-indigo-400`} onMouseDown={onToggle}>
         {props.label}
       </span>
     );

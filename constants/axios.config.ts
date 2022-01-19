@@ -12,15 +12,6 @@ export const apiAxios = axios.create({
     withCredentials: true
 });
 
-apiAxios.interceptors.response.use(function(response){
-    if(response.status == 403){
-        let router = useRouter();
-        router.push("/login");
-        throw new Error("User unauthorized try logging in");
-    }
-    return response;
-})
-
 export const authAxios = axios.create({
     baseURL: `${BASE_ENDPOINT}/auth`,
     timeout: 5000,
