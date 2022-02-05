@@ -13,7 +13,11 @@ import BlockStyleControls from './BlockStyleControls';
 import { convertToHTML } from 'draft-convert';
 import 'draft-js/dist/Draft.css';
 
-export default function RichEditor() {
+interface IRichEditor{
+  editorData :(body: string) => any;
+}
+
+export default function RichEditor({editorData} :IRichEditor) {
 
     const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
 
@@ -37,8 +41,6 @@ export default function RichEditor() {
 
     function handleKeyCommand(command :string, editorState :EditorState) :"handled" | "not-handled"{
       const newState = RichUtils.handleKeyCommand(editorState, command);
-
-      console.log(command)
       if (newState) {
         setEditorState(newState);
         return 'handled';
@@ -63,6 +65,8 @@ export default function RichEditor() {
 
     function handleClick(){
       let contentRaw = convertToRaw(editorState.getCurrentContent())
+      let parsed_data = JSON.stringify(contentRaw);
+      editorData(parsed_data);
     }
 
     function getBlockStyle(block :ContentBlock) :string{

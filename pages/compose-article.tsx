@@ -1,24 +1,51 @@
 import React, { useState, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import CheckAuth from '@/components/CheckAuth';
+import GetCSRF from '@/components/GetCSRF';
 import dynamic from 'next/dynamic'
 
 const DynamicTextEditor = dynamic(() => import('@/components/editor/RichEditor'), {ssr :false});
 
 export default function ComposeArticle() {
+    let editorData:string = "";
+    let title :string = "";
+    let summary :string = "";
+    const textEditorObj = (body :string) :void => {
+        editorData = body;
+        /**
+         * TODO: send data to the backend
+         */
+    }
+
+    function getText(body :string, inputName :string){
+        switch(inputName){
+            case "post-title":
+                title = body;
+                break;
+
+            case "post-summary":
+                summary = body;
+                break;
+        }
+    }
 
     return (
         <div>
             <CheckAuth />
+            <GetCSRF />
             <Navbar />
-            <Title />
-            <Summary />
-            <DynamicTextEditor />
+            <Title getText={getText}/>
+            <Summary getText={getText}/>
+            <DynamicTextEditor editorData={textEditorObj}/>
         </div>
     )
 }
 
-const Title = () => {
+interface IText{
+  getText: (body :string, inputName :string) => any
+}
+
+const Title = ({getText}:IText) => {
     const [ length, setLength ] = useState<number>(0);
     return (
         <section className='mx-4 mt-5'>
@@ -31,13 +58,16 @@ const Title = () => {
                 name="post-title"
                 className='w-[100%] p-2 border-2 border-indigo-900 outline-none'
                 type="text"
-                onChange={(e) => setLength(e.target.value.length)}
+                onChange={(e) => {
+                    setLength(e.target.value.length);
+                    getText(e.target.value, e.target.name);
+                }}
             />
         </section>
     )
 }
 
-const Summary = () => {
+const Summary = ({getText} :IText) => {
     const [ length, setLength ] = useState<number>(0);
     return (
         <section className='mx-4 mt-5'>
@@ -49,7 +79,10 @@ const Summary = () => {
             <textarea 
                 name="post-summary"
                 className='w-[100%] p-2 border-2 border-indigo-900 outline-none h-32 resize-none'
-                onChange={(e) => setLength(e.target.value.length)}
+                onChange={(e) => {
+                    setLength(e.target.value.length);
+                    getText(e.target.value, e.target.name);
+                }}
             />
         </section>
     )
