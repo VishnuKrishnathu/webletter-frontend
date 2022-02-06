@@ -26,7 +26,7 @@ export default function Signup() {
 
         setLoadingState(true);
 
-        authAxios.post("/register-user", {
+        authAxios.post("/register-user/", {
             username, full_name, email, password
         }).then(({data}) => {
             setLoadingState(false);

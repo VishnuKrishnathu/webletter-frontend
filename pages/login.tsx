@@ -18,7 +18,7 @@ export default function Login() {
         let password = (e.target as any)[2].value; //password
         setLoadingState(true);
 
-        authAxios.post('/login-user', {
+        authAxios.post('/login-user/', {
             username, password
         }).then(data => {
             setLoadingState(false);

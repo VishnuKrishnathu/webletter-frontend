@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import CheckAuth from '@/components/CheckAuth';
 import GetCSRF from '@/components/GetCSRF';
 import dynamic from 'next/dynamic'
+import { apiAxios } from '@/constants/axios.config';
 
 const DynamicTextEditor = dynamic(() => import('@/components/editor/RichEditor'), {ssr :false});
 
@@ -12,9 +13,15 @@ export default function ComposeArticle() {
     let summary :string = "";
     const textEditorObj = (body :string) :void => {
         editorData = body;
+        if(title == "" || summary == "") return
         /**
          * TODO: send data to the backend
          */
+        apiAxios.post('/post-blog/', {
+            title, summary,
+            article: editorData
+        }).then(({data}) => console.log(data))
+        .catch(err => console.log(err))
     }
 
     function getText(body :string, inputName :string){
