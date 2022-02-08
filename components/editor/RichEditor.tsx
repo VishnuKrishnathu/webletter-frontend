@@ -135,7 +135,7 @@ export default function RichEditor({editorData} :IRichEditor) {
             </div>
             <button 
               onClick={handleClick}
-              className='mt-4 rounded bg-indigo-900 p-2 text-slate-50'
+              className='mt-4 rounded bg-indigo-900 p-2 text-slate-50 hover:bg-indigo-800'
             >
               SUBMIT
             </button>

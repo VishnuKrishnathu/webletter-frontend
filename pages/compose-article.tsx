@@ -4,6 +4,7 @@ import CheckAuth from '@/components/CheckAuth';
 import GetCSRF from '@/components/GetCSRF';
 import dynamic from 'next/dynamic'
 import { apiAxios } from '@/constants/axios.config';
+import Cookies from 'js-cookie'
 
 const DynamicTextEditor = dynamic(() => import('@/components/editor/RichEditor'), {ssr :false});
 
@@ -17,9 +18,14 @@ export default function ComposeArticle() {
         /**
          * TODO: send data to the backend
          */
+        let cookies = Cookies.get('csrftoken')
         apiAxios.post('/post-blog/', {
             title, summary,
             article: editorData
+        }, {
+            headers: {
+                'X-CSRFToken' : cookies ? cookies : ''
+            }
         }).then(({data}) => console.log(data))
         .catch(err => console.log(err))
     }
