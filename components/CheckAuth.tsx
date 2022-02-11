@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { authAxios } from '@/constants/axios.config';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 export default function CheckAuth() {
   let router = useRouter()
@@ -14,7 +15,7 @@ export default function CheckAuth() {
       })
   }, [router])
     return (
-        <>
-        </>
+        <React.Fragment>
+        </React.Fragment>
     )
 }

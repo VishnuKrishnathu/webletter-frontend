@@ -12,7 +12,7 @@ export default function MinorBlog({props} : {props :IMinorBlogProps}) {
         <div className='rounded shadow-md p-2 flex flex-col min-w-[17rem]'>
             {props.imageUrl && image && 
             <Image 
-                loader={({ src, width, quality }) => image} 
+                unoptimized={true}
                 src={image} 
                 alt="blog image" 
                 height={200} 
