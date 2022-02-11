@@ -33,6 +33,10 @@ export default function Navbar() {
         .catch(err => logOut())
     }, [])
 
+    /**
+     * TODO : change the navbar layout to show username
+     */
+
     return (
         <div className='text-indigo-900 flex justify-between items-center py-1 shadow-md h-12'>
             <Link href="/" passHref><div className='ml-8 font-bold text-3xl cursor-pointer'>Logo</div></Link>
