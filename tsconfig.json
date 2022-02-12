@@ -20,8 +20,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "node_modules/@types/tailwind-react-ui"]
 }
