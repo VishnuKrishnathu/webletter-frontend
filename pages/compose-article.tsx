@@ -1,23 +1,26 @@
 import React, { useState, useRef } from 'react';
-import Navbar from '@/components/Navbar';
+import NavBar from '@/components/Navbar';
 import CheckAuth from '@/components/CheckAuth';
-import GetCSRF from '@/components/GetCSRF';
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 import { apiAxios } from '@/constants/axios.config';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import { store } from '@/store/store';
+import { notificationState } from '@/store/actions/action';
 
 const DynamicTextEditor = dynamic(() => import('@/components/editor/RichEditor'), {ssr :false});
+const DynamicCSRF = dynamic(() => import('@/components/GetCSRF'), {ssr :false});
 
 export default function ComposeArticle() {
     let editorData:string = "";
     let title :string = "";
     let summary :string = "";
+    const router = useRouter();
+
     const textEditorObj = (body :string) :void => {
         editorData = body;
         if(title == "" || summary == "") return
-        /**
-         * TODO: send data to the backend
-         */
+
         let cookies = Cookies.get('csrftoken')
         apiAxios.post('/post-blog/', {
             title, summary,
@@ -26,27 +29,39 @@ export default function ComposeArticle() {
             headers: {
                 'X-CSRFToken' : cookies ? cookies : ''
             }
-        }).then(({data}) => console.log(data))
-        .catch(err => console.log(err))
+        }).then(({data}) => {
+            location.reload();
+            store.dispatch(notificationState("Article composed"))
+        })
+        .catch(err => console.log(err));
     }
 
-    function getText(body :string, inputName :string){
-        switch(inputName){
-            case "post-title":
-                title = body;
-                break;
+    // retrieve the value of text fields from title and summary component
+    function getText(body ?:string, inputName ?:string){
+        if(body && inputName){
+            switch(inputName){
+                case "post-title":
+                    title = body;
+                    break;
 
-            case "post-summary":
-                summary = body;
-                break;
+                case "post-summary":
+                    summary = body;
+                    break;
+            }
+
+        }
+        else if(!body && inputName == "post-title") title = ""
+        else if(!body && inputName == "post-summary") summary = ""
+        return {
+            title, summary
         }
     }
 
     return (
         <div>
             <CheckAuth />
-            <GetCSRF />
-            <Navbar />
+            <DynamicCSRF />
+            <NavBar />
             <Title getText={getText}/>
             <Summary getText={getText}/>
             <DynamicTextEditor editorData={textEditorObj}/>
@@ -55,7 +70,7 @@ export default function ComposeArticle() {
 }
 
 interface IText{
-  getText: (body :string, inputName :string) => any
+  getText: (body ?:string, inputName ?:string) => {title :string, summary :string}
 }
 
 const Title = ({getText}:IText) => {
@@ -71,6 +86,7 @@ const Title = ({getText}:IText) => {
                 name="post-title"
                 className='w-[100%] p-2 border-2 border-indigo-900 outline-none'
                 type="text"
+                value={getText().title}
                 onChange={(e) => {
                     setLength(e.target.value.length);
                     getText(e.target.value, e.target.name);
@@ -92,6 +108,7 @@ const Summary = ({getText} :IText) => {
             <textarea 
                 name="post-summary"
                 className='w-[100%] p-2 border-2 border-indigo-900 outline-none h-32 resize-none'
+                value={getText().summary}
                 onChange={(e) => {
                     setLength(e.target.value.length);
                     getText(e.target.value, e.target.name);

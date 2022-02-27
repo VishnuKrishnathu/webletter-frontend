@@ -5,17 +5,20 @@ import React from 'react';
 
 export default function CheckAuth() {
   let router = useRouter()
+
   useEffect(()=> {
       authAxios.get("/get-user")
-      .then(data => console.log(data))
+      .then(({ data }) => console.log(data))
       .catch(err => {
-        if(err.response.status == 403){
+        if(err.response.status == 401){
           router.push('/login')
         }
       })
   }, [router])
-    return (
-        <React.Fragment>
-        </React.Fragment>
-    )
+
+
+  return (
+      <React.Fragment>
+      </React.Fragment>
+  )
 }

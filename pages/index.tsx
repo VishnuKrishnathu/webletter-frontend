@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Navbar from 'components/Navbar';
-import ArticlesSection from 'components/ArticlesSection';
+import ArticlesSection from '@/components/ArticlesSection';
 import CheckAuth from '@/components/CheckAuth';
 
 

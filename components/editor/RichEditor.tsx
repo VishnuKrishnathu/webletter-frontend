@@ -10,7 +10,6 @@ import {
 } from 'draft-js';
 import InlineStyleControls from '@/components/editor/InlineStyleControls';
 import BlockStyleControls from './BlockStyleControls';
-import { convertToHTML } from 'draft-convert';
 import 'draft-js/dist/Draft.css';
 
 interface IRichEditor{
