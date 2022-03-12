@@ -7,6 +7,10 @@ module.exports = {
       {
         source: '/blogs/:blog_id(\\D+)',
         destination: '/page-not-found'
+      },
+      {
+        source: '/profile/blogs/:blog_id(\\D+)',
+        destination: '/page-not-found'
       }
     ];
   }

@@ -6,7 +6,8 @@
       "@/components/*": ["components/*"],
       "@/constants/*": ["constants/*"],
       "@/styles/*": ["styles/*"],
-      "@/store/*": ["store/*"]
+      "@/store/*": ["store/*"],
+      "@/types/*": ["types/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -26,5 +27,5 @@
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "node_modules/@types/tailwind-react-ui"]
+  "exclude": ["node_modules", "node_modules/@types/tailwind-react-ui", "components/BlogsSection.tsx"]
 }
