@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Navbar from 'components/Navbar';
 import { authAxios } from '@/constants/axios.config';
+import Link from 'next/link';
 
 interface IUserData {
   username :string;
@@ -17,6 +18,7 @@ const Profile :NextPage = () => {
     authAxios.get('/get-user-data').then(({data}) => setUserDetails(data))
     .catch(err => console.error(err));
   }, [])
+
   return (
     <React.Fragment>
         <Navbar />
@@ -34,7 +36,9 @@ const Profile :NextPage = () => {
             <input name="full_name" type="text" value={userDetails ? userDetails.full_name : ""} className='p-2 border-2 border-blue-700 m-2'readOnly={true}/>
           </div>
         </div>
-        <button className='m-2 rounded bg-indigo-600 p-2 hover:bg-indigo-500'>SHOW ALL BLOGS</button>
+        <Link href='profile/blogs/' passHref>
+          <button className='m-2 rounded bg-indigo-600 p-2 hover:bg-indigo-500'>SHOW ALL BLOGS</button>
+        </Link>
     </React.Fragment>
   )
 }

@@ -9,12 +9,11 @@ import {
     convertFromRaw,
     ContentBlock
 } from 'draft-js'
+import { IBlogAPI } from "@/types/api_types";
 
-interface IBlogData {
-    article :string;
-    summary :string;
-    title :string;
-    user :number | null;
+interface IBlogData extends Omit<IBlogAPI, "user" | "id">{
+  user: null | number;
+  id:  null | number;
 }
 
 const BlogsPage :NextPage= () => {
@@ -22,7 +21,9 @@ const BlogsPage :NextPage= () => {
         article: "",
         summary: "",
         title: "",
-        user: null 
+        user: null,
+        imageUrl: "",
+        id : null
     });
     const [articleText, setArticleText] = useState<RawDraftContentState | null>(null);
     const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());

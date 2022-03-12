@@ -11,6 +11,8 @@ export default function Login() {
 
     const router = useRouter();
 
+    useEffect(() => {}, [])
+
     function loginHandler(e :React.FormEvent){
         e.preventDefault();
         setErrorState("");
