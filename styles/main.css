@@ -403,17 +403,17 @@ Ensure the default browser behavior of the `hidden` attribute.
 .relative {
   position: relative;
 }
-.bottom-5 {
-  bottom: 1.25rem;
-}
-.left-0 {
-  left: 0px;
-}
 .bottom-0 {
   bottom: 0px;
 }
 .right-0 {
   right: 0px;
+}
+.bottom-5 {
+  bottom: 1.25rem;
+}
+.left-0 {
+  left: 0px;
 }
 .m-auto {
   margin: auto;
@@ -601,6 +601,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .resize-none {
   resize: none;
 }
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -621,9 +624,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .justify-between {
   justify-content: space-between;
-}
-.gap-3 {
-  gap: 0.75rem;
 }
 .gap-4 {
   gap: 1rem;

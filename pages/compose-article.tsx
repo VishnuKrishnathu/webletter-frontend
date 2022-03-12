@@ -1,24 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import NavBar from '@/components/Navbar';
 import CheckAuth from '@/components/CheckAuth';
 import dynamic from 'next/dynamic';
 import { apiAxios } from '@/constants/axios.config';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
 import { store } from '@/store/store';
-import { notificationState } from '@/store/actions/action';
+import { notificationState, editorTitle, editorSummary } from '@/store/actions/action';
 
 const DynamicTextEditor = dynamic(() => import('@/components/editor/RichEditor'), {ssr :false});
 const DynamicCSRF = dynamic(() => import('@/components/GetCSRF'), {ssr :false});
 
 export default function ComposeArticle() {
     let editorData:string = "";
-    let title :string = "";
-    let summary :string = "";
-    const router = useRouter();
 
     const textEditorObj = (body :string) :void => {
         editorData = body;
+        let { title } : {title :string}= store.getState().editor;
+        let { summary } : {summary :string}= store.getState().editor;
         if(title == "" || summary == "") return
 
         let cookies = Cookies.get('csrftoken')
@@ -31,30 +29,9 @@ export default function ComposeArticle() {
             }
         }).then(({data}) => {
             location.reload();
-            store.dispatch(notificationState("Article composed"))
+            store.dispatch(notificationState("Article composed"));
         })
         .catch(err => console.log(err));
-    }
-
-    // retrieve the value of text fields from title and summary component
-    function getText(body ?:string, inputName ?:string){
-        if(body && inputName){
-            switch(inputName){
-                case "post-title":
-                    title = body;
-                    break;
-
-                case "post-summary":
-                    summary = body;
-                    break;
-            }
-
-        }
-        else if(!body && inputName == "post-title") title = ""
-        else if(!body && inputName == "post-summary") summary = ""
-        return {
-            title, summary
-        }
     }
 
     return (
@@ -62,19 +39,36 @@ export default function ComposeArticle() {
             <CheckAuth />
             <DynamicCSRF />
             <NavBar />
-            <Title getText={getText}/>
-            <Summary getText={getText}/>
+            <Title />
+            <Summary />
             <DynamicTextEditor editorData={textEditorObj}/>
         </div>
     )
 }
 
 interface IText{
-  getText: (body ?:string, inputName ?:string) => {title :string, summary :string}
+  getText: (body ?:string, inputName ?:string) => {title :string, summary :string};
 }
 
-const Title = ({getText}:IText) => {
+export const Title = () => {
     const [ length, setLength ] = useState<number>(0);
+    const [ value, setValue ] = useState<string>(() => {
+        let { title } : {title :string}= store.getState().editor;
+        return title;
+    });
+
+    useEffect(() => {
+        let subscriber = store.subscribe(() => {
+            const { title } : {title :string}= store.getState().editor;
+            setValue((val) => {
+                if(val == title) return val;
+                return title;
+            })
+        })
+
+        return () => subscriber()
+    }, [])
+
     return (
         <section className='mx-4 mt-5'>
             <label htmlFor="post-title" className='mr-2 font-semibold text-ml flex justify-between'>
@@ -86,18 +80,34 @@ const Title = ({getText}:IText) => {
                 name="post-title"
                 className='w-[100%] p-2 border-2 border-indigo-900 outline-none'
                 type="text"
-                value={getText().title}
+                value={value}
                 onChange={(e) => {
                     setLength(e.target.value.length);
-                    getText(e.target.value, e.target.name);
+                    store.dispatch(editorTitle(e.target.value))
                 }}
             />
         </section>
     )
 }
 
-const Summary = ({getText} :IText) => {
+export const Summary = () => {
     const [ length, setLength ] = useState<number>(0);
+    const [ value, setValue ] = useState<string>(() => {
+        const { summary } :{summary :string} = store.getState().editor;
+        return summary;
+    });
+
+    useEffect(() => {
+        let subscriber = store.subscribe(() => {
+            let { summary } : {summary :string}= store.getState().editor;
+            setValue((val) => {
+                if( val == summary) return val;
+                return summary;
+            });
+        })
+
+        return () => subscriber()
+    }, [])
     return (
         <section className='mx-4 mt-5'>
             <label htmlFor="post-summary" className='mr-2 font-semibold text-ml flex justify-between'>
@@ -108,10 +118,10 @@ const Summary = ({getText} :IText) => {
             <textarea 
                 name="post-summary"
                 className='w-[100%] p-2 border-2 border-indigo-900 outline-none h-32 resize-none'
-                value={getText().summary}
+                value={ value }
                 onChange={(e) => {
                     setLength(e.target.value.length);
-                    getText(e.target.value, e.target.name);
+                    store.dispatch(editorSummary(e.target.value))
                 }}
             />
         </section>

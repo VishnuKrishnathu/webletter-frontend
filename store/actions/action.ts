@@ -1,12 +1,23 @@
-import { userData, INotification } from "../types/user"
+import { userData, INotification } from "../types/store_types"
 
 export const userDataState = (payload :string) :userData => {
     return {
-        type: 'user/username', payload
+        type: 'USER/username', payload
     }
 }
 
 export const notificationState = (payload :string) :INotification => ({
-    type: 'notification/message',
+    type: 'NOTIFICATION/message',
+    payload
+})
+
+
+export const editorTitle = (payload :string) => ({
+    type: 'EDITOR/title',
+    payload
+})
+
+export const editorSummary = (payload :string) => ({
+    type: 'EDITOR/summary',
     payload
 })

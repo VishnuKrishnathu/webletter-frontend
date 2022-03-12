@@ -7,3 +7,8 @@ export interface INotification {
     type :string;
     payload : string;
 }
+
+export interface IEditor {
+    type :string;
+    payload :string;
+}

@@ -1,20 +1,19 @@
 import { authAxios } from '@/constants/axios.config';
 import { store } from '@/store/store';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { userDataState } from '@/store/actions/action';
 import { Navbar, Container, NavDropdown, Nav } from 'react-bootstrap';
 
 export default function NavBar() {
     const [username, setUsername] = useState<string | null | undefined>(null);
-    const drop_menu = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
 
-    function handleLogout(){
+    const handleLogout = useCallback(() => {
         authAxios.get('/logout-user')
         router.push('/login');
-    }
+    }, [router])
 
     useEffect(function(){
         let subsriber = store.subscribe(() => {
@@ -28,12 +27,7 @@ export default function NavBar() {
     useEffect(function(){
         authAxios.get('/get-user').then(({data}) => store.dispatch(userDataState(data.username)))
         .catch(err => handleLogout())
-    }, [])
-
-    function handleDropAction(){
-        if (!drop_menu.current) return;
-        drop_menu.current.style.opacity = drop_menu.current.style.opacity == "1" ? "0" : "1"
-    }
+    }, [handleLogout])
 
     return (
         <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
@@ -46,6 +40,7 @@ export default function NavBar() {
             <Nav.Link href="/">Home</Nav.Link>
             <NavDropdown title={username ? username : ""} id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/profile/blogs">My Blogs</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
             </NavDropdown>

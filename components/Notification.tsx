@@ -4,10 +4,11 @@ import { store } from '@/store/store';
 
 const Notification = () => {
     const [open, setOpen] = useState<boolean>(false);
+    const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
 
     useEffect(() => {
       let subscriber = store.subscribe(() => {
-        console.log(store.getState().notification)
+        setNotificationMessage(store.getState().notification)
         setOpen(true)
       })
 
@@ -16,13 +17,12 @@ const Notification = () => {
 
   return (
     <ToastContainer>
-        <Toast delay={3000} onClose={() => setOpen(false)} show={open} autohide>
+        {notificationMessage && <Toast delay={3000} onClose={() => setOpen(false)} show={open} autohide>
         <Toast.Header>
             <strong className="me-auto">Logo</strong>
-            <small>11 mins ago</small>
         </Toast.Header>
-        <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
-        </Toast>
+        <Toast.Body>{ notificationMessage }</Toast.Body>
+        </Toast>}
     </ToastContainer>
   )
 }
