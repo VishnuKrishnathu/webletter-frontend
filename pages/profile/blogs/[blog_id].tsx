@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { apiAxios } from '@/constants/axios.config';
 import { useRouter } from 'next/router';
-import { IBlogAPI } from '@/types/api_types';
-import { Title, Summary } from 'pages/compose-article';
+import RichEditor from '@/components/editor/RichEditor';
+import TitleInput from '@/components/editor/TitleInput';
+import SummaryInput from '@/components/editor/SummaryInput';
+import { editorSummary, editorTitle } from '@/store/actions/action';
+import { store } from '@/store/store';
 import { 
-    RawDraftContentState, 
-    EditorState, 
-    Editor, 
-    convertFromRaw,
-    ContentBlock
+    EditorState,
+    ContentState,
+    convertFromRaw
 } from 'draft-js'
+import dynamic from 'next/dynamic';
 
-interface IBlogData extends IBlogAPI{
-    personal :boolean;
-}
+
+const DynamicTextEditor = dynamic(() => import('@/components/editor/RichEditor'), {ssr :false});
 
 const  PersonalBlogEdit :NextPage = () => {
     const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
@@ -25,89 +26,35 @@ const  PersonalBlogEdit :NextPage = () => {
     let summary = "";
 
     useEffect(function(){
+        if(!blog_id) return;
         apiAxios.get(`/get-blogs/${blog_id}`)
         .then(({data}) => {
             if(!data.personal) router.push('/');
+
+            /**
+             * 1. Gets content from the api
+             * 2. creates a content state object instance (https://draftjs.org/docs/api-reference-content-state#createfromblockarray)
+             * 3. creates an editor state object instance (https://draftjs.org/docs/api-reference-editor-state/#createwithcontent)
+             */
+            console.log(JSON.parse(data.article))
+            let editor_text = JSON.parse(data.article)
+            let contentState = convertFromRaw(editor_text);
+            setEditorState(EditorState.createWithContent(contentState))
             console.log(data)
+            store.dispatch(editorSummary(data.summary))
+            store.dispatch(editorTitle(data.title))
         })
         .catch(err => {
             console.log(err)
         });
     }, [blog_id, router])
 
-    function getText(body ?:string, inputName ?:string){
-        if(body && inputName){
-            switch(inputName){
-                case "post-title":
-                    title = body;
-                    break;
-
-                case "post-summary":
-                    summary = body;
-                    break;
-            }
-
-        }
-        else if(!body && inputName == "post-title") title = ""
-        else if(!body && inputName == "post-summary") summary = ""
-        return {
-            title, summary
-        }
-    }
-
-    function getBlockStyle(block :ContentBlock) :string{
-      switch (block.getType()) {
-        case 'blockquote':
-          return 'RichEditor-blockquote';
-        
-        case 'header-one':
-          return 'RichEditor-header-one';
-
-        case 'header-two':
-          return 'RichEditor-header-two';
-
-        case 'header-three':
-          return 'RichEditor-header-three';
-
-        case 'header-four':
-          return 'RichEditor-header-four';
-
-        case 'header-five':
-          return 'RichEditor-header-five';
-
-        case 'header-six':
-          return 'RichEditor-header-five';
-
-
-        default:
-          return "";
-      }
-    }
-
-    const styleMap = {
-      CODE: {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-        fontSize: 16,
-        padding: 2,
-      },
-      H1 : {
-        fontSize :36
-      }
-    }
 
   return (
     <React.Fragment>
-        <Title getText={getText} />
-        <Summary getText={getText} />
-        <div className='RichEditor-editor px-2 mt-4 py-2 overflow-y-scroll w-[100%]'>
-            <Editor
-                editorState={editorState}
-                onChange={setEditorState}
-                blockStyleFn={getBlockStyle}
-                customStyleMap={styleMap}
-            />
-        </div>
+        <TitleInput />
+        <SummaryInput />
+        <DynamicTextEditor editorStateProp={ editorState }/>
     </React.Fragment>
   )
 }

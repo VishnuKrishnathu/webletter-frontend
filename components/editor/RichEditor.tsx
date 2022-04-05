@@ -1,4 +1,4 @@
-import React, { useState, ReactChildren } from 'react';
+import React, { useState, ReactChildren, useEffect } from 'react';
 import { 
   Editor, 
   EditorState, 
@@ -13,12 +13,13 @@ import BlockStyleControls from './BlockStyleControls';
 import 'draft-js/dist/Draft.css';
 
 interface IRichEditor{
-  editorData :(body: string) => any;
+  editorData ?:(body: string) => any;
+  editorStateProp ?: EditorState
 }
 
-export default function RichEditor({editorData} :IRichEditor) {
+export default function RichEditor( {editorData, editorStateProp = EditorState.createEmpty()}:IRichEditor) {
 
-    const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
+    const [editorState, setEditorState] = useState<EditorState>(() => editorStateProp);
 
     function onTab(e : React.KeyboardEvent<{}>) :string | null{
       if(e.keyCode === 9){
@@ -65,7 +66,7 @@ export default function RichEditor({editorData} :IRichEditor) {
     function handleClick(){
       let contentRaw = convertToRaw(editorState.getCurrentContent())
       let parsed_data = JSON.stringify(contentRaw);
-      editorData(parsed_data);
+      if (editorData) editorData(parsed_data);
     }
 
     function getBlockStyle(block :ContentBlock) :string{
@@ -109,6 +110,7 @@ export default function RichEditor({editorData} :IRichEditor) {
       }
     }
 
+
     return (
         <div className='mx-4 mt-3'>
             <InlineStyleControls
@@ -141,3 +143,5 @@ export default function RichEditor({editorData} :IRichEditor) {
         </div>
     )
 }
+
+// RichEditor.defaultProps = 
